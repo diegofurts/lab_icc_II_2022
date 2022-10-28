@@ -39,7 +39,7 @@ int particao(int *v, int ini, int fim) {
 
 	while (i <= j) {
 
-		while(i <= fim && v[i] <= pivo) {
+		while(i <= j && v[i] <= pivo) {
 			i++;
 		}
 

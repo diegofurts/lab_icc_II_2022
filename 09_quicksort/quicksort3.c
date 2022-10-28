@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-#define TAM 100
+#define TAM 100000
 
-// mediana de três
+// mediana de três aleatórios
 // reaver ifs (algo errado  não está certo)
 void escolhe_pivo(int *v, int ini, int fim) {
 	
@@ -11,42 +13,51 @@ void escolhe_pivo(int *v, int ini, int fim) {
 	if (ini >= fim-1) //nem precisa
 		return;
 
-	int meio = (ini+fim)/2;
-	
-	if (v[ini] < v[fim] && 
-		v[ini] < v[meio] &&
-		v[meio] < v[fim]) {
-		//meio é a mediana
-		aux = v[meio];
-		v[meio] = v[ini];
-		v[ini] = aux;
+	srand(time(0));
 
-	} else if (v[ini] < v[fim] && 
-		v[ini] < v[meio] && 
-		v[meio] > v[fim]) {
-		// fim é mediana
-		aux = v[fim];
-		v[fim] = v[ini];
-		v[ini] = aux;
+	int a = rand()%(fim-ini) + ini;
+	int b = rand()%(fim-ini) + ini;
+	int c = rand()%(fim-ini) + ini;
 
-	} else if (v[ini] > v[fim] && 
-		v[ini] > v[meio] && 
-		v[meio]  < v[fim]) {
-		// fim é a mediana
-		aux = v[fim];
-		v[fim] = v[ini];
-		v[ini] = aux;
 
-	} else if (v[ini] > v[fim] && 
-		v[ini] > v[meio] && 
-		v[meio] > v[fim]) {
-		//meio é a mediana
-		aux = v[meio];
-		v[meio] = v[ini];
-		v[ini] = aux;
+	if (v[a] < v[b]) {
 
-	} else {
-		//ini é a mediana
+		if (v[a] < v[c]) {
+			if (v[b] < v[c]) { // a < b < c
+				aux = v[b];
+				v[b] = v[ini];
+				v[ini] = aux;
+			} else { // a < c < b
+				aux = v[c];
+				v[c] = v[ini];
+				v[ini] = aux;
+			}
+		} else { // c < a < b
+			aux = v[c];
+			v[c] = v[ini];
+			v[ini] = aux;
+		}
+
+	} else { // b < a
+
+		if (v[a] < v[c]) { // b < a < c
+			aux = v[a];
+			v[a] = v[ini];
+			v[ini] = aux;
+		} else { // c < a e b < a
+
+			if (v[b] < v[c]) { // b < c < a
+				aux = v[c];
+				v[c] = v[ini];
+				v[ini] = aux;
+			} else { // c < b < a
+				aux = v[b];
+				v[b] = v[ini];
+				v[ini] = aux;
+			}
+
+		}
+
 	}
 
 	return;
@@ -64,7 +75,7 @@ int particao(int *v, int ini, int fim) {
 
 	while (i <= j) {
 
-		while(i <= fim && v[i] <= pivo) {
+		while(i <= j && v[i] <= pivo) {
 			i++;
 		}
 
@@ -97,7 +108,7 @@ void quicksort(int *v, int ini, int fim) {
 		return;
 
 	int pos_pivo = particao(v, ini, fim);
-	printf("%d\n", pos_pivo);
+	//printf("%d\n", pos_pivo);
 	// recursao
 	quicksort(v, ini, pos_pivo-1);
 	quicksort(v, pos_pivo+1, fim);
